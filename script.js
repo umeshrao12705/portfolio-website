@@ -146,7 +146,7 @@ function saveStudent(photoData) {
     students.push(student);
   }
 
-  localStorage.setItem('students', JSON.stringify(students));
+  saveToFirebase('students', JSON.stringify(students));
   localStorage.removeItem('editId');
 
   alert('Student details saved!');
@@ -233,7 +233,7 @@ function editDetails(id) {
   const student = students.find(s => s.id === id);
   const pwd = prompt('Enter password to edit:');
   if (pwd === student.password) {
-    localStorage.setItem('editId', id);
+    saveToFirebase('editId', id);
     window.location.href = 'form.html';
   } else {
     alert('Incorrect password!');
@@ -246,7 +246,7 @@ function deleteDetails(id) {
   const pwd = prompt('Enter password to delete:');
   if (pwd === student.password) {
     const updated = students.filter(s => s.id !== id);
-    localStorage.setItem('students', JSON.stringify(updated));
+    saveToFirebase('students', JSON.stringify(updated));
     alert('Student deleted.');
     displayAllStudents();
   } else {

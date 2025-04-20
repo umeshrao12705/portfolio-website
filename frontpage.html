@@ -1,0 +1,84 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <style>        
+        .container {
+            margin: 50px auto;
+            max-width: 800px;
+            padding: 20px;
+            background: white;  
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        ul {
+            text-align: left;
+            display: inline-block;
+        }
+        #dark-mode-toggle {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 8px;
+        font-size: 18px;
+        cursor: pointer;
+        background-color: transparent;
+        color: white;
+        border: none;
+        border-radius: 50%;
+    }
+    #dark-mode-toggle:hover {
+    color: #bbb;
+    }
+    #dark-mode-toggle:hover {
+    background-color: #555;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Portfolio Management</h1>
+        <nav>
+            <ul>
+                <li><a href="frontpage.html">Home</a></li>
+                <li><a href="form.html" onclick="localStorage.removeItem('editId')">Create Personal Portfolio</a></li>
+                <li><a href="view.html">View Entries</a></li>
+            </ul>
+        </nav>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<button id="dark-mode-toggle">
+<i class="fas fa-moon"></i>
+</button>
+    </header>
+    <section id="home">
+        <div class="container">
+            <h2><strong>Portfolio Management System </strong></h2>
+            <p>
+                The \Portfolio Management System is a web-based application that enables students 
+                to create, manage, and update their personal portfolios. This system allows users to input 
+                their personal details, educational qualifications, and work experience, ensuring a well-organized 
+                record of their achievements.
+            </p>
+    
+            <h3>Key Features:</h3>
+            <ul>
+                <li><strong>Create Portfolio:</strong> Enter personal, academic, and work details easily.</li>
+                <li><strong>View All Entries:</strong> Display student records in a structured format.</li>
+                <li><strong>Edit/Delete Information:</strong> Update/Delete details whenever needed.</li>
+                <li><strong>Data Persistence:</strong> Information remains saved even after closing the browser.</li>
+            </ul>
+    
+            <h3>Project Team Members:</h3>
+            <ul>
+                <li><strong>Rajat</strong> (230070800042)</li>
+                <li><strong>Ravinder </strong> (230070800046)</li>
+                <li><strong>Umesh</strong> (230070800058)</li>
+                <li><strong>Varun Chuahan</strong> (230070800062)</li>
+                <li><strong>Rajat Sharma</strong> (230070800043)</li>
+                <li><strong>Vinay Kumar</strong> (230070824013)</li>
+                <li><strong>Yash</strong> (230070824015)</li>
+            </ul>
+        </div>
+    </section>
+    <script src="dark.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+body.dark-mode {
+    background-color: #444444;
+    color: #000000; 
+}
+
+header {
+    background-color: #000000;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-size: 18px;
+    position: relative;
+}
+
+nav ul li a::after {
+    content: ''; 
+    position: absolute;
+    bottom: -6px; 
+    left: 0;
+    width: 0%;
+    height: 3px; 
+    background-color: #ff004f;
+    transition:0.4s;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+
+}
+
+.container {
+    width: 75%;
+    margin: auto;
+    padding: 10px;
+    background: white;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.container.dark-mode {
+    background: rgb(34, 34, 34);
+    color:#f4f4f4;
+    
+}
+
+#search-button {
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    padding: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-radius: 50%;
+  }
+  #search-button:hover {
+    color: #bbb;
+    background-color: #555;
+  }
+
+body.dark-mode label,
+body.dark-mode legend,
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    color: #f4f4f4;
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: #333;
+    border: 1px solid #888;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #f4f4f4;
+}

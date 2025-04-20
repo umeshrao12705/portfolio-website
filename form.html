@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Bio Data Form</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+      .form-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          max-width: 400px;
+          margin: auto;
+          padding: 20px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+      }
+      .form-container label, 
+      .form-container textarea,
+      .form-container select, 
+      .form-container button {
+          width: 100%;
+          margin: 5px 0;
+          padding: 10px;
+      }
+      .form-container input {
+          width: 95%;
+          margin: 5px 0;
+          padding: 10px;
+      }
+      .education-container {
+          width: 95%;
+          margin-top: 10px;
+          border: 1px solid #ccc;
+          padding: 10px;
+          border-radius: 5px;
+          background: #f9f9f9;
+      }
+      #dark-mode-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  }
+  #dark-mode-toggle:hover {
+  color: #bbb;
+  }
+  #dark-mode-toggle:hover {
+      background-color: #555;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<button id="dark-mode-toggle">
+<i class="fas fa-moon"></i>
+</button>
+</head>
+<body>
+    <header>
+        <h1>Personal Portfolio</h1>
+        <nav>
+            <ul>
+                <li><a href="frontpage.html">Home</a></li>
+                <li><a href="view.html">View Entries</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="form-container">
+    <h1>Enter Student Details</h1>
+    <form id="userForm">
+    
+    <label>Upload Profile Photo:</label>
+    <input type="file" id="profilePhoto" accept="image/*">
+    <img id="previewPhoto" src="" alt="Photo Preview" style="max-width: 100px; display: none; margin: 10px 0;">
+    
+    <label>First Name:</label>
+    <input type="text" id="firstName" required>
+
+    <label>Last Name:</label>
+    <input type="text" id="lastName" >
+
+    <label>Gender:</label>
+    <select id="gender" required>
+      <option value="">Select</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Other</option>
+    </select>
+
+    <label>Age:</label>
+    <input type="number" id="age" required min="15" maxlength="2">
+
+    <label>Address:</label>
+    <textarea id="address" required></textarea>
+
+    <label>Phone Number:</label>
+    <input type="text" id="phone" required maxlength="10" minlength="10">
+
+    <label>Email:</label>
+    <input type="email" id="email" required>
+
+    <label>Class 10th Marks:</label>
+    <input type="text" id="class10Marks" required>
+
+    <label>Class 10th School:</label>
+    <input type="text" id="class10School" required>
+
+    <label>Class 12th Marks:</label>
+    <input type="text" id="class12Marks" >
+
+    <label>Class 12th School:</label>
+    <input type="text" id="class12School" >
+
+    <h3>Higher Education:</h3>
+    <div id="educationList" class="education-container"></div>
+    <button type="button" onclick="addEducation()">Add Higher Education</button>    
+
+    <h3>Work Experience:</h3>
+    <div id="experienceList">
+    <textarea name="experience[]" placeholder="Describe your work experience"></textarea>
+    </div>
+    <button type="button" onclick="addExperience()">Add More Experience</button>
+    
+    <label>Skills (comma-separated):</label>
+    <input type="text" id="skills" placeholder="HTML, CSS, JavaScript">
+    
+    <label>Create a Password:</label>
+    <input type="password" id="password" required>
+    
+    <label>Confirm Password:</label>
+    <input type="password" id="confirmPassword" required>
+    
+    <button type="submit">Save</button>
+  </form>
+  <script>
+    document.getElementById('profilePhoto').addEventListener('change', function () {
+      const reader = new FileReader();
+      reader.onload = function () {
+        const preview = document.getElementById('previewPhoto');
+        preview.src = reader.result;
+        preview.style.display = 'block';
+      };
+      if (this.files[0]) reader.readAsDataURL(this.files[0]);
+    });
+  
+    function addExperience() {
+      const list = document.getElementById('experienceList');
+      const textarea = document.createElement('textarea');
+      textarea.name = "experience[]";
+      textarea.placeholder = "Describe your work experience";
+      textarea.style.marginTop = "10px";
+      list.appendChild(textarea);
+    }
+  
+    document.getElementById("userForm").addEventListener("submit", function (e) {
+      const pwd = document.getElementById("password").value;
+      const confirm = document.getElementById("confirmPassword").value;
+  
+      if (pwd !== confirm) {
+        e.preventDefault();
+        alert("Passwords do not match!");
+      }
+    });
+    function addEducation(type = '', course = '', institute = '', marks = '', year = '') {
+    const container = document.getElementById('educationList');
+
+    const div = document.createElement('div');
+    div.className = 'education-block';
+    div.style.marginTop = '10px';
+    div.innerHTML = `
+      <select name="eduType[]" required>
+        <option value="">Select Type</option>
+        <option value="Diploma" ${type === 'Diploma' ? 'selected' : ''}>Diploma</option>
+        <option value="Degree" ${type === 'Degree' ? 'selected' : ''}>Degree</option>
+        <option value="Other" ${type === 'Other' ? 'selected' : ''}>Other</option>
+      </select>
+
+      <input type="text" name="eduCourse[]" placeholder="Course Name" value="${course}" required>
+      <input type="text" name="eduInstitute[]" placeholder="Institution Name" value="${institute}" required>
+      <input type="text" name="eduMarks[]" placeholder="Marks / CGPA" value="${marks}" required>
+      <input type="text" name="eduYear[]" placeholder="Completion Year" value="${year}" required>
+
+      <button type="button" onclick="this.parentElement.remove()">Remove</button>
+    `;
+    container.appendChild(div);
+  }
+
+  // Retain this for work experience
+  function addExperience() {
+    const list = document.getElementById('experienceList');
+    const textarea = document.createElement('textarea');
+    textarea.name = "experience[]";
+    textarea.placeholder = "Describe your work experience";
+    textarea.style.marginTop = "10px";
+    list.appendChild(textarea);
+  }
+
+  document.getElementById("userForm").addEventListener("submit", function (e) {
+    const pwd = document.getElementById("password").value;
+    const confirm = document.getElementById("confirmPassword").value;
+
+    if (pwd !== confirm) {
+      e.preventDefault();
+      alert("Passwords do not match!");
+    }
+  });
+  </script>
+  <script src="script.js"></script>
+  <script src="dark.js"></script>
+</body>
+</html>

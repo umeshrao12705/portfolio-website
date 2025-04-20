@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>View Student Data</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+  <style>
+    .container {
+      margin: 50px auto;
+      max-width: 800px;
+      padding: 20px;
+      background: rgb(255, 255, 255);  
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .container.dark-mode {
+      background: rgb(26, 26, 26);
+      color: #ffffff;
+    }
+    .filter-box, .sort-box {
+      flex: 1 1 300px;
+      padding: 10px;
+      background: #f0f0f0;
+      border-radius: 8px;
+    }
+    .dark-mode .filter-box,
+    .dark-mode .sort-box {
+      background: #2a2a2a;
+      color: white;
+    }
+    .filter-sort-wrapper {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    label {
+      font-weight: bold;
+    }
+    #dark-mode-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: transparent;
+      color: white;
+      border: none;
+      border-radius: 50%;
+    }
+    #dark-mode-toggle:hover {
+      color: #bbb;
+      background-color: #555;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <h1>Personal Portfolio</h1>
+    <nav>
+      <ul>
+        <li><a href="frontpage.html">Home</a></li>
+        <li><a href="form.html" onclick="localStorage.removeItem('editId')">Create Personal Portfolio</a></li>
+      </ul>
+    </nav>
+    <button id="dark-mode-toggle"><i class="fas fa-moon"></i></button>
+    <button id="search-button" onclick="promptSearch()" title="Search by name"><i class="fas fa-search"></i></button>
+  </header>
+
+  <div class="container">
+    <h2>Filter/Sort Student Entries</h2>
+    <div class="container filter-sort-wrapper">
+      <div class="filter-box">
+        <form id="filterForm">
+          <label for="filterSelect">Filter by:</label>
+          <select id="filterSelect">
+            <option value="">None</option>
+            <option value="gender-male">Gender: Male</option>
+            <option value="gender-female">Gender: Female</option>
+            <option value="age-18">Age ≥ 18</option>
+            <option value="marks10-60">Class 10 Marks ≥ 60</option>
+          </select>
+          <button type="submit">Apply</button>
+        </form>
+      </div>
+
+      <div class="sort-box">
+        <label for="sortOption">Sort by:</label>
+        <select id="sortOption">
+          <option value="">None</option>
+          <option value="name-asc">Name (A–Z)</option>
+          <option value="name-desc">Name (Z–A)</option>
+          <option value="age-asc">Age (Low to High)</option>
+          <option value="age-desc">Age (High to Low)</option>
+          <option value="marks10-asc">Class 10 Marks (Low to High)</option>
+          <option value="marks10-desc">Class 10 Marks (High to Low)</option>
+          <option value="marks12-asc">Class 12 Marks (Low to High)</option>
+          <option value="marks12-desc">Class 12 Marks (High to Low)</option>
+        </select>
+        <button type="button" onclick="clearFilters()">Reset</button>
+      </div>
+    </div>
+
+    <div class="container" id="details"></div>
+  </div>
+
+  <script defer src="download-pdf.js"></script>
+  <script src="script.js"></script>
+  <script src="dark.js"></script>
+  <script>
+    document.getElementById('filterForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const filterValue = document.getElementById('filterSelect').value;
+      const sortValue = document.getElementById('sortOption').value;
+
+      let students = JSON.parse(localStorage.getItem('students')) || [];
+
+      if (filterValue) {
+        students = students.filter(s => {
+          switch (filterValue) {
+            case 'gender-male': return s.gender === 'Male';
+            case 'gender-female': return s.gender === 'Female';
+            case 'age-18': return parseInt(s.age) >= 18;
+            case 'marks10-60': return parseFloat(s.class10Marks) >= 60;
+            default: return true;
+          }
+        });
+      }
+
+      if (sortValue) {
+        students.sort((a, b) => {
+          switch (sortValue) {
+            case 'name-asc': return a.firstName.localeCompare(b.firstName);
+            case 'name-desc': return b.firstName.localeCompare(a.firstName);
+            case 'age-asc': return parseInt(a.age) - parseInt(b.age);
+            case 'age-desc': return parseInt(b.age) - parseInt(a.age);
+            case 'marks10-asc': return parseFloat(a.class10Marks) - parseFloat(b.class10Marks);
+            case 'marks10-desc': return parseFloat(b.class10Marks) - parseFloat(a.class10Marks);
+            case 'marks12-asc': return parseFloat(a.class12Marks) - parseFloat(b.class12Marks);
+            case 'marks12-desc': return parseFloat(b.class12Marks) - parseFloat(a.class12Marks);
+            default: return 0;
+          }
+        });
+      }
+
+      displayAllStudents(students);
+    });
+
+    function clearFilters() {
+      document.getElementById('filterForm').reset();
+      document.getElementById('sortOption').value = '';
+      displayAllStudents();
+    }
+  </script>
+</body>
+</html>

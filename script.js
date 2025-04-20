@@ -286,3 +286,10 @@ function getVal(id) {
     }
   };
 
+// Save to localStorage
+localStorage.setItem('students', JSON.stringify(students));
+
+// Save to Firebase
+if (typeof saveToFirebase === 'function') {
+  saveToFirebase(student);
+}

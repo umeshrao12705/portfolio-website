@@ -15,12 +15,12 @@
   } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCPitxR-kvot9nW2LP0D0DfSxfM_Oaiwdk",
+    authDomain: "student-portfolio-12705.firebaseapp.com",
+    projectId: "student-portfolio-12705",
+    storageBucket: "student-portfolio-12705.firebasestorage.app",
+    messagingSenderId: "1342457915",
+    appId: "1:1342457915:web:46c29e843167a2a969741e"
   };
 
   const app = initializeApp(firebaseConfig);

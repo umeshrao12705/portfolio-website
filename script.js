@@ -1,4 +1,4 @@
-// Firebase integration version of script.js
+// Firebase integration version of script.js with full CRUD
 import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
@@ -7,23 +7,25 @@ import {
   collection,
   addDoc,
   getDocs,
-  doc,
   getDoc,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCPitxR-kvot9nW2LP0D0DfSxfM_Oaiwdk",
-  authDomain: "student-portfolio-12705.firebaseapp.com",
-  projectId: "student-portfolio-12705",
-  storageBucket: "student-portfolio-12705.firebasestorage.app",
-  messagingSenderId: "1342457915",
-  appId: "1:1342457915:web:46c29e843167a2a969741e"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+let currentEditId = null;
 
 // Utility function
 document.addEventListener('DOMContentLoaded', () => {
@@ -85,8 +87,14 @@ async function saveStudent(photoData) {
   };
 
   try {
-    await addDoc(collection(db, 'students'), student);
-    alert('Student saved to Firebase!');
+    if (currentEditId) {
+      await updateDoc(doc(db, 'students', currentEditId), student);
+      alert('Student updated in Firebase!');
+    } else {
+      await addDoc(collection(db, 'students'), student);
+      alert('Student added to Firebase!');
+    }
+    currentEditId = null;
     document.getElementById('userForm').reset();
     fetchAndDisplayStudents();
   } catch (e) {
@@ -124,7 +132,83 @@ async function fetchAndDisplayStudents() {
       ${data.education?.length ? `<p><strong>Higher Education:</strong></p><ul>${data.education.map(e => `<li>${e.type}: ${e.course} at ${e.institute} (${e.year}) - ${e.marks}</li>`).join('')}</ul>` : ''}
       ${data.workExp?.length ? `<p><strong>Work Experience:</strong></p><ul>${data.workExp.map(e => `<li>${e}</li>`).join('')}</ul>` : ''}
       ${data.skills ? `<p><strong>Skills:</strong> ${data.skills}</p>` : ''}
+      <button onclick="editDetails('${data.id}', '${data.password}')">Edit</button>
+      <button onclick="deleteDetails('${data.id}', '${data.password}')">Delete</button>
+      <button id="download-pdf" style="margin: 20px;">Download PDF</button>
     `;
     container.appendChild(card);
   });
+}
+
+async function editDetails(id, realPassword) {
+  const pwd = prompt('Enter password to edit:');
+  if (pwd !== realPassword) return alert('Incorrect password!');
+
+  try {
+    const docSnap = await getDoc(doc(db, 'students', id));
+    if (docSnap.exists()) {
+      const student = docSnap.data();
+      currentEditId = id;
+
+      document.getElementById('firstName').value = student.firstName;
+      document.getElementById('lastName').value = student.lastName;
+      document.getElementById('gender').value = student.gender;
+      document.getElementById('age').value = student.age;
+      document.getElementById('address').value = student.address;
+      document.getElementById('phone').value = student.phone;
+      document.getElementById('email').value = student.email;
+      document.getElementById('class10Marks').value = student.class10Marks;
+      document.getElementById('class10School').value = student.class10School;
+      document.getElementById('class12Marks').value = student.class12Marks;
+      document.getElementById('class12School').value = student.class12School;
+      document.getElementById('skills').value = student.skills;
+      document.getElementById('password').value = student.password;
+
+      const eduContainer = document.getElementById('educationList');
+      eduContainer.innerHTML = '';
+      if (Array.isArray(student.education)) {
+        student.education.forEach(edu => {
+          addEducation(edu.type, edu.course, edu.institute, edu.marks, edu.year);
+        });
+      }
+
+      const expList = document.getElementById('experienceList');
+      expList.innerHTML = '';
+      if (Array.isArray(student.workExp)) {
+        student.workExp.forEach(exp => {
+          const textarea = document.createElement('textarea');
+          textarea.name = 'experience[]';
+          textarea.value = exp;
+          textarea.style.marginTop = '10px';
+          expList.appendChild(textarea);
+        });
+      }
+
+      if (student.photo) {
+        const preview = document.getElementById('previewPhoto');
+        preview.src = student.photo;
+        preview.style.display = 'block';
+      }
+
+      window.scrollTo(0, 0);
+    } else {
+      alert('Student record not found!');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error loading student data.');
+  }
+}
+
+async function deleteDetails(id, realPassword) {
+  const pwd = prompt('Enter password to delete:');
+  if (pwd !== realPassword) return alert('Incorrect password!');
+  try {
+    await deleteDoc(doc(db, 'students', id));
+    alert('Student deleted from Firebase.');
+    fetchAndDisplayStudents();
+  } catch (err) {
+    console.error(err);
+    alert('Failed to delete student.');
+  }
 }
